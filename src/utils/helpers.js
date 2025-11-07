@@ -7,9 +7,12 @@ export const scrollToSection = (elementId) => {
 };
 
 export const downloadResume = () => {
+  // Build the resume URL using PUBLIC_URL so it works in dev and when hosted on GitHub Pages
+  const resumePath = (process.env.PUBLIC_URL || '') + '/' + encodeURIComponent('assets/MOHAMMED SIDHIQ M Resume.pdf');
+
   // Method 1: Try XMLHttpRequest with proper headers
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', '/assets/MOHAMMED%20SIDHIQ%20M%20Resume.pdf', true);
+  xhr.open('GET', resumePath, true);
   xhr.responseType = 'arraybuffer';
   
   xhr.onload = function(e) {
@@ -21,22 +24,27 @@ export const downloadResume = () => {
       const url = window.URL.createObjectURL(blob);
       
       // Create temporary link and trigger download
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'MOHAMMED_SIDHIQ_M_Resume.pdf';
-      
-      // Ensure link is hidden and add to DOM
-      link.style.display = 'none';
-      document.body.appendChild(link);
-      
-      // Trigger the download
-      link.click();
-      
-      // Clean up
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-      
-      console.log('Resume downloaded successfully via XHR method');
+      // Create a hidden download link to trigger download
+      const downloadLink = document.createElement('a');
+      downloadLink.href = url;
+      downloadLink.download = 'MOHAMMED_SIDHIQ_M_Resume.pdf';
+      downloadLink.style.display = 'none';
+      document.body.appendChild(downloadLink);
+      // Trigger download
+      downloadLink.click();
+
+      // Also open the PDF in a new tab so user can view it immediately
+      // (Some browsers may block window.open if not triggered by a user gesture.)
+      try {
+        window.open(url, '_blank');
+      } catch (err) {
+        console.warn('Opening resume tab blocked by browser:', err);
+      }
+
+      // Clean up the temporary download link and revoke the blob URL later
+      document.body.removeChild(downloadLink);
+      setTimeout(() => window.URL.revokeObjectURL(url), 60 * 1000);
+      console.log('Resume download triggered and opened in a new tab (XHR method)');
     } else {
       fallbackDownload();
     }
@@ -55,17 +63,39 @@ const fallbackDownload = () => {
   console.log('Using fallback download method');
   
   // Method 2: Direct link with download attribute using URL encoding for spaces
+  const resumePath = (process.env.PUBLIC_URL || '') + '/' + encodeURIComponent('assets/MOHAMMED SIDHIQ M Resume.pdf');
   const link = document.createElement('a');
-  link.href = '/assets/MOHAMMED%20SIDHIQ%20M%20Resume.pdf';
-  link.download = 'MOHAMMED_SIDHIQ_M_Resume.pdf';
+  link.href = resumePath;
   link.target = '_blank';
   link.rel = 'noopener noreferrer';
+
+  // Also create a hidden link to force download (some browsers ignore download attr for cross-origin)
+  const downloadLink = document.createElement('a');
+  downloadLink.href = resumePath;
+  downloadLink.download = 'MOHAMMED_SIDHIQ_M_Resume.pdf';
+  downloadLink.style.display = 'none';
+  document.body.appendChild(downloadLink);
   
   // Force the browser to treat it as download
   link.style.display = 'none';
   document.body.appendChild(link);
-  link.click();
+  // Open the PDF in a new tab
+  try {
+    link.click();
+  } catch (err) {
+    // fallback if click blocked
+    window.open(resumePath, '_blank');
+  }
+
+  // Trigger download (may be ignored by some browsers if cross-origin)
+  try {
+    downloadLink.click();
+  } catch (err) {
+    console.warn('Download attempt may have been blocked:', err);
+  }
+
   document.body.removeChild(link);
+  document.body.removeChild(downloadLink);
   
   // Show instructions to user
   setTimeout(() => {

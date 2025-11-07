@@ -8,8 +8,10 @@ export const portfolioData = {
     email: "msidhiq335@gmail.com",
     phone: "+91 9566808659",
     location: "Tamil Nadu, India",
-    resume: "/assets/MOHAMMED SIDHIQ M Resume.pdf",
-    avatar: "/assets/sid-pro.png",
+  // Use PUBLIC_URL so resume path resolves correctly in dev and on GitHub Pages
+  resume: (process.env.PUBLIC_URL || '') + '/' + encodeURIComponent('assets/MOHAMMED SIDHIQ M Resume.pdf'),
+  // Use PUBLIC_URL so the asset path works in development, production and GitHub Pages
+  avatar: process.env.PUBLIC_URL + "/assets/sid-pro.png",
     yearsOfExperience: 1,
   },
 
