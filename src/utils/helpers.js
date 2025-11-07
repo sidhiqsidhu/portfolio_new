@@ -8,7 +8,8 @@ export const scrollToSection = (elementId) => {
 
 export const downloadResume = () => {
   // Build the resume URL using PUBLIC_URL so it works in dev and when hosted on GitHub Pages
-  const resumePath = (process.env.PUBLIC_URL || '') + '/' + encodeURIComponent('assets/MOHAMMED SIDHIQ M Resume.pdf');
+  // Use URL-friendly filename 'resume.pdf'
+  const resumePath = (process.env.PUBLIC_URL || '') + '/assets/resume.pdf';
 
   // Method 1: Try XMLHttpRequest with proper headers
   const xhr = new XMLHttpRequest();
@@ -27,7 +28,7 @@ export const downloadResume = () => {
       // Create a hidden download link to trigger download
       const downloadLink = document.createElement('a');
       downloadLink.href = url;
-      downloadLink.download = 'MOHAMMED_SIDHIQ_M_Resume.pdf';
+  downloadLink.download = 'MOHAMMED_SIDHIQ_M_Resume.pdf';
       downloadLink.style.display = 'none';
       document.body.appendChild(downloadLink);
       // Trigger download
@@ -63,7 +64,7 @@ const fallbackDownload = () => {
   console.log('Using fallback download method');
   
   // Method 2: Direct link with download attribute using URL encoding for spaces
-  const resumePath = (process.env.PUBLIC_URL || '') + '/' + encodeURIComponent('assets/MOHAMMED SIDHIQ M Resume.pdf');
+  const resumePath = (process.env.PUBLIC_URL || '') + '/assets/resume.pdf';
   const link = document.createElement('a');
   link.href = resumePath;
   link.target = '_blank';
