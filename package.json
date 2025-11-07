@@ -2,7 +2,7 @@
   "name": "myportfolio",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://sidhiqsidhu.github.io/Portfolio",
+  "homepage": "https://sidhiqsidhu.github.io/portfolio_new",
   "dependencies": {
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.15",
