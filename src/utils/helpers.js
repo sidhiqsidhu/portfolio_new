@@ -6,107 +6,35 @@ export const scrollToSection = (elementId) => {
   }
 };
 
-export const downloadResume = () => {
-  // Build the resume URL using PUBLIC_URL so it works in dev and when hosted on GitHub Pages
-  // Use URL-friendly filename 'resume.pdf'
-  const resumePath = (process.env.PUBLIC_URL || '') + '/assets/resume.pdf';
-
-  // Method 1: Try XMLHttpRequest with proper headers
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', resumePath, true);
-  xhr.responseType = 'arraybuffer';
-  
-  xhr.onload = function(e) {
-    if (this.status === 200) {
-      // Create blob from array buffer
-      const blob = new Blob([this.response], {type: 'application/pdf'});
-      
-      // Create download URL
-      const url = window.URL.createObjectURL(blob);
-      
-      // Create temporary link and trigger download
-      // Create a hidden download link to trigger download
-      const downloadLink = document.createElement('a');
-      downloadLink.href = url;
-  downloadLink.download = 'MOHAMMED_SIDHIQ_M_Resume.pdf';
-      downloadLink.style.display = 'none';
-      document.body.appendChild(downloadLink);
-      // Trigger download
-      downloadLink.click();
-
-      // Also open the PDF in a new tab so user can view it immediately
-      // (Some browsers may block window.open if not triggered by a user gesture.)
-      try {
-        window.open(url, '_blank');
-      } catch (err) {
-        console.warn('Opening resume tab blocked by browser:', err);
-      }
-
-      // Clean up the temporary download link and revoke the blob URL later
-      document.body.removeChild(downloadLink);
-      setTimeout(() => window.URL.revokeObjectURL(url), 60 * 1000);
-      console.log('Resume download triggered and opened in a new tab (XHR method)');
-    } else {
-      fallbackDownload();
-    }
-  };
-  
-  xhr.onerror = function() {
-    console.log('XHR method failed, trying fallback');
-    fallbackDownload();
-  };
-  
-  xhr.send();
-};
-
-// Fallback download method
-const fallbackDownload = () => {
-  console.log('Using fallback download method');
-  
-  // Method 2: Direct link with download attribute using URL encoding for spaces
-  const resumePath = (process.env.PUBLIC_URL || '') + '/assets/resume.pdf';
-  const link = document.createElement('a');
-  link.href = resumePath;
-  link.target = '_blank';
-  link.rel = 'noopener noreferrer';
-
-  // Also create a hidden link to force download (some browsers ignore download attr for cross-origin)
-  const downloadLink = document.createElement('a');
-  downloadLink.href = resumePath;
-  downloadLink.download = 'MOHAMMED_SIDHIQ_M_Resume.pdf';
-  downloadLink.style.display = 'none';
-  document.body.appendChild(downloadLink);
-  
-  // Force the browser to treat it as download
-  link.style.display = 'none';
-  document.body.appendChild(link);
-  // Open the PDF in a new tab
+// Resume download removed from codebase per request; provide a friendly no-op.
+export const downloadResume = async (saveAs = 'Mohammed Sidhiq M Resume.pdf') => {
+  // Download the resume asset and trigger a direct browser download using the provided filename.
+  // This avoids prompting the user with a file-picker and saves to the browser's default Downloads folder.
   try {
-    link.click();
-  } catch (err) {
-    // fallback if click blocked
-    window.open(resumePath, '_blank');
-  }
+    const resumeUrl = `${process.env.PUBLIC_URL}/assets/resume.pdf`;
+    const resp = await fetch(resumeUrl, { cache: 'no-cache' });
+    if (!resp.ok) throw new Error(`Failed to fetch resume: ${resp.status}`);
+    const blob = await resp.blob();
 
-  // Trigger download (may be ignored by some browsers if cross-origin)
-  try {
-    downloadLink.click();
+    const objectUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = objectUrl;
+    // Use the friendly filename requested by the user
+    a.download = saveAs;
+    // Append, click and remove to trigger download without UI prompts
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    // Revoke the object URL shortly after
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 5000);
   } catch (err) {
-    console.warn('Download attempt may have been blocked:', err);
-  }
-
-  document.body.removeChild(link);
-  document.body.removeChild(downloadLink);
-  
-  // Show instructions to user
-  setTimeout(() => {
-    const userAgent = navigator.userAgent;
-    if (userAgent.includes('Chrome')) {
-      alert('Resume download started! If it opened in a new tab instead of downloading:\n\n1. Right-click on the PDF\n2. Select "Save as..."\n3. Choose your download location\n\nOr check your Downloads folder - it may have downloaded automatically.');
-    } else {
-      alert('Resume download initiated! Please check your Downloads folder or browser\'s download manager.');
+    console.error('Error downloading resume:', err);
+    try {
+      alert('Unable to download resume. Please try again or view the resume in the assets folder.');
+    } catch (e) {
+      // noop in non-browser contexts
     }
-  }, 500);
+  }
 };
 
 export const formatDate = (dateString) => {

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Award, Briefcase, GraduationCap, Calendar, MapPin, Users, Star } from 'lucide-react';
 import { useScrollAnimation } from '../hooks/useAnimations';
 import { portfolioData } from '../data/portfolioData';
+import { downloadResume } from '../utils/helpers';
 
 const About = () => {
   const { ref, inView } = useScrollAnimation();
@@ -115,6 +116,21 @@ const About = () => {
                     <div className="text-2xl font-bold text-cyber-purple">5+</div>
                     <div className="text-white/60 text-sm">Projects Completed</div>
                   </div>
+                </div>
+                
+                {/* Resume download CTA */}
+                <div className="mt-6 text-center">
+                  <button
+                    onClick={() => downloadResume()}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); downloadResume(); } }}
+                    className="inline-flex items-center space-x-3 px-5 py-3 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 text-white/90 rounded-full border border-white/10 hover:border-cyan-400/40 transition-all duration-200"
+                    aria-label="Download resume"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v12m0 0l4-4m-4 4-4-4M21 21H3" />
+                    </svg>
+                    <span>Download Resume</span>
+                  </button>
                 </div>
               </div>
 

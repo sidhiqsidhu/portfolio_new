@@ -115,15 +115,14 @@ const Header = () => {
             <motion.button
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.6 }}
-              onClick={downloadResume}
-              onKeyDown={(e) => handleKeyDown(e, downloadResume)}
-              className="relative flex items-center space-x-2 px-6 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full hover:from-purple-500 hover:to-pink-500 transition-all duration-300 group overflow-hidden shadow-lg hover:shadow-purple-500/25"
+              transition={{ delay: 0.55 }}
+              onClick={() => downloadResume()}
+              onKeyDown={(e) => handleKeyDown(e, () => downloadResume())}
+              className="relative px-4 py-2 flex items-center space-x-2 rounded-full bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-white/10 hover:border-cyan-400/40 transition-all duration-300 text-white/90 font-medium"
               aria-label="Download resume"
             >
-              <div className="absolute inset-0 bg-white/10 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300"></div>
-              <Download size={16} className="relative z-10" />
-              <span className="relative z-10 font-medium">Resume</span>
+              <Download size={16} />
+              <span className="relative z-10">Resume</span>
             </motion.button>
           </div>
 
@@ -190,18 +189,17 @@ const Header = () => {
                     {isDark ? <Sun size={18} className="relative z-10" /> : <Moon size={18} className="relative z-10" />}
                   </motion.button>
 
+                  {/* Mobile/compact resume button (in the bottom area of the mobile menu) */}
                   <motion.button
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.4 }}
-                    onClick={downloadResume}
-                    onKeyDown={(e) => handleKeyDown(e, downloadResume)}
-                    className="relative flex items-center space-x-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full hover:from-purple-500 hover:to-pink-500 transition-all duration-300 group shadow-lg"
+                    transition={{ delay: 0.35 }}
+                    onClick={() => downloadResume()}
+                    onKeyDown={(e) => handleKeyDown(e, () => downloadResume())}
+                    className="ml-2 relative p-3 rounded-full bg-gradient-to-br from-cyan-500/10 to-blue-500/10 backdrop-blur-sm border border-white/10 hover:border-cyan-400/40 transition-all duration-300 group"
                     aria-label="Download resume"
                   >
-                    <div className="absolute inset-0 bg-white/10 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300"></div>
-                    <Download size={16} className="relative z-10" />
-                    <span className="relative z-10 font-medium">Resume</span>
+                    <Download size={18} className="relative z-10" />
                   </motion.button>
                 </div>
                 </div>

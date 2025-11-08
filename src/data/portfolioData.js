@@ -8,16 +8,15 @@ export const portfolioData = {
     email: "msidhiq335@gmail.com",
     phone: "+91 9566808659",
     location: "Tamil Nadu, India",
-  // Use PUBLIC_URL so resume path resolves correctly in dev and on GitHub Pages
-  // Renamed file to 'resume.pdf' to avoid spaces/caching issues
-  resume: (process.env.PUBLIC_URL || '') + '/assets/resume.pdf',
   // Use PUBLIC_URL so the asset path works in development, production and GitHub Pages
   avatar: process.env.PUBLIC_URL + "/assets/sid-pro.png",
+    // Resume file served from public/assets - used by the download helper
+    resume: process.env.PUBLIC_URL + '/assets/resume.pdf',
     yearsOfExperience: 1,
   },
 
   social: {
-    github: "https://github.com/mohammedsidhiq",
+    github: "https://github.com/sidhiqsidhu",
     linkedin: "https://www.linkedin.com/in/mohammedsidhiq",
     twitter: "https://twitter.com/mohammedsidhiq",
     instagram: "https://www.instagram.com/sidhiq_78?igsh=MXVwZWRrbW9wcW80ZA==",
